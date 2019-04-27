@@ -103,6 +103,8 @@ public class AnkiConnectionTest {
                 Roadmap map = roadScanner.getRoadmap();
                 List<Roadpiece> pieces = map.toList();
 
+                System.out.println("Roadpieces found: " + pieces.size());
+
                 for (Roadpiece piece : pieces) {
                     System.out.println("First road piece: " + piece);
 
