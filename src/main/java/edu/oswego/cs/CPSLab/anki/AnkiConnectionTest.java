@@ -96,21 +96,7 @@ public class AnkiConnectionTest {
 
                 System.out.println("   Setting Speed...");
                 v.sendMessage(new SetSpeedMessage(500, 100));
-
-
-                //Thread.sleep(1000);
-                //gs.sendMessage(new TurnMessage());
-
-                Roadmap map = roadScanner.getRoadmap();
-                List<Roadpiece> pieces = map.toList();
-
-                System.out.println("Roadpieces found: " + pieces.size());
-                System.out.println();
-
-                for (Roadpiece piece : pieces) {
-                    System.out.println("First road piece: " + piece);
-
-                }
+                
 
                 System.out.print("Sleeping for 100secs... ");
                 Thread.sleep(100000);
