@@ -5,6 +5,7 @@ import de.adesso.anki.messages.LocalizationTransitionUpdateMessage;
 import de.adesso.anki.messages.SetSpeedMessage;
 import de.adesso.anki.roadmap.Roadmap;
 import edu.oswego.cs.CPSLab.anki.AnkiConnectionTest;
+import sun.awt.windows.ThemeReader;
 
 public class RoadmapScanner {
 
@@ -66,14 +67,19 @@ public class RoadmapScanner {
       );
 
       System.out.println("vehicles last roadpieceID: " + lastPosition.getRoadPieceId());
-      System.out.println("vehicles last Location: " + lastPosition.getLocationId());
-      System.out.println(lastPosition.toString());
-
 
       switchPositions();
 
       if (atInteresection(lastPos, secondLastPos, thirdLastPos)) {
         System.out.println("About to hit intersection!");
+        vehicle.sendMessage(new SetSpeedMessage(0, 100));
+        try {
+          Thread.sleep(3000);
+        } catch (InterruptedException e) {
+          System.out.println("Thread interrupted :o");
+        }
+
+        vehicle.sendMessage(new SetSpeedMessage(600, 100));
       }
 
 
