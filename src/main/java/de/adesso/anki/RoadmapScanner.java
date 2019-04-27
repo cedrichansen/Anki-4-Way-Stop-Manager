@@ -53,13 +53,16 @@ public class RoadmapScanner {
   }
 
   protected void handleTransitionUpdate(LocalizationTransitionUpdateMessage message) {
-    if (lastPosition != null) {
+    if (lastPosition != null) { 
       roadmap.add(
           lastPosition.getRoadPieceId(),
           lastPosition.getLocationId(),
           lastPosition.isParsedReverse()
       );
-      
+
+      System.out.println("vehicles last roadpieceID: " + lastPosition.getRoadPieceId());
+      System.out.println("vehicles last Location: " + lastPosition.getLocationId());
+
       if (roadmap.isComplete()) {
         this.stopScanning();
       }

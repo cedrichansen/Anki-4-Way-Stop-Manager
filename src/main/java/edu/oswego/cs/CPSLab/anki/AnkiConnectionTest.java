@@ -104,6 +104,7 @@ public class AnkiConnectionTest {
                 List<Roadpiece> pieces = map.toList();
 
                 System.out.println("Roadpieces found: " + pieces.size());
+                System.out.println();
 
                 for (Roadpiece piece : pieces) {
                     System.out.println("First road piece: " + piece);
