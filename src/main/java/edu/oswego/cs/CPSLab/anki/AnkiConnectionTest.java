@@ -6,6 +6,8 @@ import de.adesso.anki.Vehicle;
 import de.adesso.anki.roadmap.*;
 import de.adesso.anki.RoadmapScanner;
 import de.*;
+import de.adesso.anki.roadmap.roadpieces.*;
+
 
 import de.adesso.anki.messages.BatteryLevelRequestMessage;
 import de.adesso.anki.messages.BatteryLevelResponseMessage;
