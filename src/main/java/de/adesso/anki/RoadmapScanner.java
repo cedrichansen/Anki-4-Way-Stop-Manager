@@ -73,7 +73,7 @@ public class RoadmapScanner {
       if (atInteresection(lastPos, secondLastPos, thirdLastPos)) {
         System.out.println("About to hit intersection!");
 
-        vehicle.sendMessage(new SetSpeedMessage(0, -100));
+        vehicle.sendMessage(new SetSpeedMessage(0, -5000));
         try {
           Thread.sleep(3000);
         } catch (InterruptedException e) {
