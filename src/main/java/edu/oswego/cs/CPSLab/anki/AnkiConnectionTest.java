@@ -4,6 +4,7 @@ import de.adesso.anki.AnkiConnector;
 import de.adesso.anki.MessageListener;
 import de.adesso.anki.Vehicle;
 import de.adesso.anki.roadmap.*;
+import de.adesso.anki.RoadmapScanner;
 import de.*;
 
 import de.adesso.anki.messages.BatteryLevelRequestMessage;
@@ -85,7 +86,7 @@ public class AnkiConnectionTest {
                 v.sendMessage(new PingRequestMessage());
 
                 RoadmapScanner roadScanner = new RoadmapScanner(v);
-                roadScannerstartScanning();
+                roadScanner.startScanning();
 
                 System.out.println("   Setting Speed...");
                 v.sendMessage(new SetSpeedMessage(200, 100));
