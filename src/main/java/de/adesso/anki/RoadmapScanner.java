@@ -61,14 +61,16 @@ public class RoadmapScanner {
           lastPosition.isParsedReverse()
       );
 
+      System.out.println("vehicles last roadpieceID: " + lastPosition.getRoadPieceId());
+      System.out.println("vehicles last Location: " + lastPosition.getLocationId());
+
       if (lastPosition.getRoadPieceId() == 10) {
         System.out.println("Hit the intersection!");
         AnkiConnectionTest.atIntersection = true;
         vehicle.disconnect();
 
       }
-      System.out.println("vehicles last roadpieceID: " + lastPosition.getRoadPieceId());
-      System.out.println("vehicles last Location: " + lastPosition.getLocationId());
+
 
       if (roadmap.isComplete()) {
         this.stopScanning();
