@@ -4,6 +4,7 @@ import de.adesso.anki.messages.LocalizationPositionUpdateMessage;
 import de.adesso.anki.messages.LocalizationTransitionUpdateMessage;
 import de.adesso.anki.messages.SetSpeedMessage;
 import de.adesso.anki.roadmap.Roadmap;
+import edu.oswego.cs.CPSLab.anki.AnkiConnectionTest;
 
 public class RoadmapScanner {
 
@@ -53,13 +54,19 @@ public class RoadmapScanner {
   }
 
   protected void handleTransitionUpdate(LocalizationTransitionUpdateMessage message) {
-    if (lastPosition != null) { 
+    if (lastPosition != null) {
       roadmap.add(
           lastPosition.getRoadPieceId(),
           lastPosition.getLocationId(),
           lastPosition.isParsedReverse()
       );
 
+      if (lastPosition.getRoadPieceId() == 10) {
+        System.out.println("Hit the intersection!");
+        AnkiConnectionTest.atIntersection = true;
+        vehicle.disconnect();
+
+      }
       System.out.println("vehicles last roadpieceID: " + lastPosition.getRoadPieceId());
       System.out.println("vehicles last Location: " + lastPosition.getLocationId());
 

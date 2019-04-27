@@ -32,6 +32,7 @@ public class AnkiConnectionTest {
 
     static long pingReceivedAt;
     static long pingSentAt;
+    public static boolean atIntersection= false;
     
     public static void main(String[] args) throws IOException, InterruptedException {
 
