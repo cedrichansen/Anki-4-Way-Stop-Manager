@@ -77,5 +77,25 @@ public class RoadmapScanner {
       }
     }
   }
-  
+
+
+  //a is the most recent peice, and c is the least recent
+  protected boolean atInteresection(int a, int b, int c){
+    int [] ids = {a, b, c};
+
+    int [][] cases = {
+            {34,33,23},
+            {23,48,17},
+            {20,18,18},
+            {18,18,20}
+    };
+
+    for(int [] cas : cases){
+      boolean same = (cas[0] == ids[0])
+              && (cas[1] == ids[1])
+              && (cas[2] == ids[2]);
+      if(same) return true;
+    }
+    return false;
+  }
 }
