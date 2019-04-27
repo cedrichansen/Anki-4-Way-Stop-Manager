@@ -113,7 +113,7 @@ public class AnkiConnectionTest {
                 }
 
                 System.out.print("Sleeping for 10secs... ");
-                Thread.sleep(10000);
+                Thread.sleep(100000);
                 v.disconnect();
                 System.out.println("disconnected from " + v + "\n");
             }
