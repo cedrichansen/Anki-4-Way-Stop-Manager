@@ -30,7 +30,6 @@ import java.util.List;
  */
 public class AnkiConnectionTest {
 
-    //Test
     static long pingReceivedAt;
     static long pingSentAt;
     public static boolean atIntersection= false;
@@ -122,6 +121,9 @@ public class AnkiConnectionTest {
         anki.close();
         System.exit(0);
     }
+
+
+
 
     /**
      * Handles the response from the vehicle from the BatteryLevelRequestMessage.
