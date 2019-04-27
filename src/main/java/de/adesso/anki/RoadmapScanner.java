@@ -10,6 +10,10 @@ public class RoadmapScanner {
 
   private Vehicle vehicle;
   private Roadmap roadmap;
+
+  public static int lastPos = 0;
+  public static int secondLastPos = 0;
+  public static int thirdLastPos = 0;
   
   private LocalizationPositionUpdateMessage lastPosition;
   
@@ -65,10 +69,11 @@ public class RoadmapScanner {
       System.out.println("vehicles last Location: " + lastPosition.getLocationId());
       System.out.println(lastPosition.toString());
 
-      if (lastPosition.getRoadPieceId() == 23) {
-        System.out.println("Hit the intersection!");
-        AnkiConnectionTest.atIntersection = true;
-        //vehicle.disconnect();
+
+      switchPositions();
+
+      if (atInteresection(lastPos, secondLastPos, thirdLastPos)) {
+        System.out.println("About to hit intersection!");
       }
 
 
@@ -98,4 +103,15 @@ public class RoadmapScanner {
     }
     return false;
   }
+
+
+  public void switchPositions(){
+
+    int last = lastPosition.getRoadPieceId();
+
+    thirdLastPos = secondLastPos;
+    secondLastPos=lastPos;
+    lastPos = last;
+  }
+
 }
