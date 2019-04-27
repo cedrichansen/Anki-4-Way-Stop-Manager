@@ -30,6 +30,7 @@ import java.util.List;
  */
 public class AnkiConnectionTest {
 
+    //Test
     static long pingReceivedAt;
     static long pingSentAt;
     public static boolean atIntersection= false;
