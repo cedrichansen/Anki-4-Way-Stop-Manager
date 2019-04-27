@@ -67,7 +67,7 @@ public class RoadmapScanner {
       if (lastPosition.getRoadPieceId() == 23) {
         System.out.println("Hit the intersection!");
         AnkiConnectionTest.atIntersection = true;
-        vehicle.disconnect();
+        //vehicle.disconnect();
       }
 
 
