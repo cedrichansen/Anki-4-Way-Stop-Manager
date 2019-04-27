@@ -63,6 +63,7 @@ public class RoadmapScanner {
 
       System.out.println("vehicles last roadpieceID: " + lastPosition.getRoadPieceId());
       System.out.println("vehicles last Location: " + lastPosition.getLocationId());
+      System.out.println(lastPosition.toString());
 
       if (lastPosition.getRoadPieceId() == 23) {
         System.out.println("Hit the intersection!");
