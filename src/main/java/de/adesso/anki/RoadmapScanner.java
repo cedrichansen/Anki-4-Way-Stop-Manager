@@ -38,7 +38,8 @@ public class RoadmapScanner {
   }
   
   public void stopScanning() {
-    vehicle.sendMessage(new SetSpeedMessage(0, 12500));
+    //vehicle.sendMessage(new SetSpeedMessage(0, 12500));
+    System.out.println("Done scanning the Map");
   }
   
   public boolean isComplete() {
