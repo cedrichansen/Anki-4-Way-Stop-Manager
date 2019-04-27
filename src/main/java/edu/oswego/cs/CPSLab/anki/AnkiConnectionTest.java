@@ -95,7 +95,7 @@ public class AnkiConnectionTest {
 
 
                 System.out.println("   Setting Speed...");
-                v.sendMessage(new SetSpeedMessage(600, 100));
+                v.sendMessage(new SetSpeedMessage(500, 100));
 
 
                 //Thread.sleep(1000);

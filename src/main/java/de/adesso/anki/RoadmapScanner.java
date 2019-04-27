@@ -80,7 +80,7 @@ public class RoadmapScanner {
           System.out.println("Thread interrupted :o");
         }
 
-        vehicle.sendMessage(new SetSpeedMessage(600, 100));
+        vehicle.sendMessage(new SetSpeedMessage(600, 300));
       }
 
 
