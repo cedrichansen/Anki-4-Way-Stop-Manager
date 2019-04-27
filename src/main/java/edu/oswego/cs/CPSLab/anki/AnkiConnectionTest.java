@@ -52,6 +52,7 @@ public class AnkiConnectionTest {
                 System.out.println("      Address: " + v.getAddress());
                 System.out.println("      Color: " + v.getColor());
                 System.out.println("      charging? " + v.getAdvertisement().isCharging());
+
             }
             
             System.out.println("\nNow connecting to and doing stuff to your cars.\n\n");
@@ -79,14 +80,14 @@ public class AnkiConnectionTest {
                 v.addMessageListener(PingResponseMessage.class, prh);
                 AnkiConnectionTest.pingSentAt = System.currentTimeMillis();
                 v.sendMessage(new PingRequestMessage());
-                
-                System.out.println("   Flashing lights...");
-                LightConfig lc = new LightConfig(LightsPatternMessage.LightChannel.TAIL, LightsPatternMessage.LightEffect.STROBE, 0, 0, 0);
-                LightsPatternMessage lpm = new LightsPatternMessage();
-                lpm.add(lc);
-                v.sendMessage(lpm);
+
+                RoadmapScanner roadScanner = new RoadmapScanner(v);
+                roadScannerstartScanning();
+
                 System.out.println("   Setting Speed...");
                 v.sendMessage(new SetSpeedMessage(200, 100));
+
+
                 //Thread.sleep(1000);
                 //gs.sendMessage(new TurnMessage());
                 System.out.print("Sleeping for 10secs... ");
