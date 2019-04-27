@@ -85,15 +85,27 @@ public class AnkiConnectionTest {
                 AnkiConnectionTest.pingSentAt = System.currentTimeMillis();
                 v.sendMessage(new PingRequestMessage());
 
+                System.out.println("Starting roadmap scan");
                 RoadmapScanner roadScanner = new RoadmapScanner(v);
                 roadScanner.startScanning();
 
+
+
                 System.out.println("   Setting Speed...");
-                v.sendMessage(new SetSpeedMessage(200, 100));
+                v.sendMessage(new SetSpeedMessage(600, 100));
 
 
                 //Thread.sleep(1000);
                 //gs.sendMessage(new TurnMessage());
+
+                Roadmap map = roadScanner.getRoadmap();
+                List<Roadpiece> pieces = map.toList();
+
+                for (Roadpiece piece : pieces) {
+                    System.out.println("First road piece: " + piece);
+
+                }
+
                 System.out.print("Sleeping for 10secs... ");
                 Thread.sleep(10000);
                 v.disconnect();
