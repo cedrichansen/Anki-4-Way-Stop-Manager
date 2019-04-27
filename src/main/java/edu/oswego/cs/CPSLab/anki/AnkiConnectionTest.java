@@ -34,6 +34,7 @@ public class AnkiConnectionTest {
         System.out.print("...looking for cars...");
         List<Vehicle> vehicles = anki.findVehicles();
 
+
         if (vehicles.isEmpty()) {
             System.out.println(" NO CARS FOUND. I guess that means we're done.");
             
@@ -85,7 +86,7 @@ public class AnkiConnectionTest {
                 lpm.add(lc);
                 v.sendMessage(lpm);
                 System.out.println("   Setting Speed...");
-                v.sendMessage(new SetSpeedMessage(500, 100));
+                v.sendMessage(new SetSpeedMessage(1000, 100));
                 //Thread.sleep(1000);
                 //gs.sendMessage(new TurnMessage());
                 System.out.print("Sleeping for 10secs... ");
