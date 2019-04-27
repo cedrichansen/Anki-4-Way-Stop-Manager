@@ -64,11 +64,10 @@ public class RoadmapScanner {
       System.out.println("vehicles last roadpieceID: " + lastPosition.getRoadPieceId());
       System.out.println("vehicles last Location: " + lastPosition.getLocationId());
 
-      if (lastPosition.getRoadPieceId() == 10) {
+      if (lastPosition.getRoadPieceId() == 23) {
         System.out.println("Hit the intersection!");
         AnkiConnectionTest.atIntersection = true;
         vehicle.disconnect();
-
       }
 
 
