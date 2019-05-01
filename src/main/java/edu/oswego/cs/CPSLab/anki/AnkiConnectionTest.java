@@ -88,6 +88,8 @@ public class AnkiConnectionTest {
                 AnkiConnectionTest.pingSentAt = System.currentTimeMillis();
                 v.sendMessage(new PingRequestMessage());
 
+                System.out.println("We have vehicle: " + v.getAdvertisement().getModel().name());
+
                 System.out.println("Starting roadmap scan");
                 RoadmapScanner roadScanner = new RoadmapScanner(v);
                 roadScanner.startScanning();
@@ -107,6 +109,13 @@ public class AnkiConnectionTest {
         anki.close();
         System.exit(0);
     }
+
+
+
+
+
+
+
 
 
 
