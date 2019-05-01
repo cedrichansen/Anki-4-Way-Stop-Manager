@@ -201,6 +201,7 @@ public class RoadmapScanner {
       try {
         master = new ServerSocket(9000);
         isMaster = true;
+        System.out.println("Yay we are master");
         return true;
       } catch (IOException e) {
         System.out.println("Someone else is already master");
