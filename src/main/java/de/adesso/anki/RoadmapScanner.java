@@ -134,22 +134,15 @@ public class RoadmapScanner {
 
         if (isMaster(vehicleWhoIsUpNext)) {
           System.out.println("I am master!");
-          //TODO: start blinking lights to say we are master
           vehicle.sendMessage(masterLightPattern);
           vehicle.sendMessage(new SetSpeedMessage(600, 300));
 
           try {
-
-            while (atIntersection) {
+              //we shouldnt have to wait here
               //TODO: listen to other cars and add them to list of cars
               //Listen for car here
               //listenToConnection();
 
-              if (lastPosition.getRoadPieceId() == 11) {
-                atIntersection = false;
-              }
-
-            }
 
             isMaster = false;
             System.out.println("passing on master to next car");
@@ -168,6 +161,9 @@ public class RoadmapScanner {
             //TODO : blink the lights to say that they are salve
             //TODO: when we receive message to be master, break out of this and then we will now be master
             //TODO: reassign the vehicleWhoIsUpNext field with whoever goes next so we do not try to reconnect
+            //TODO: wait 2 seconds once we receive that we are master signal and at this point listen to other broadcasts
+            //TODO: maintain the list of cars to go next
+  
 
             slave = new Socket("localhost", PORT);
             PrintWriter out = new PrintWriter (slave.getOutputStream(), true);
