@@ -130,6 +130,7 @@ public class RoadmapScanner {
 
         if (vehicleWhoIsUpNext == null) {
           vehicleWhoIsUpNext = vehicle.getAdvertisement().toString();
+          System.out.println(vehicleWhoIsUpNext);
         }
 
         if (isMaster(vehicleWhoIsUpNext)) {
