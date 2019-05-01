@@ -99,7 +99,7 @@ public class AnkiConnectionTest {
                 
 
                 System.out.print("Sleeping for 100secs... ");
-                Thread.sleep(100000);
+                Thread.sleep(1000000);
                 v.disconnect();
                 System.out.println("disconnected from " + v + "\n");
             }
