@@ -129,7 +129,7 @@ public class RoadmapScanner {
         }
 
         if (vehicleWhoIsUpNext == null) {
-          vehicleWhoIsUpNext = vehicle.getAdvertisement().getModel().name();
+          vehicleWhoIsUpNext = vehicle.getAdvertisement().toString();
         }
 
         if (isMaster(vehicleWhoIsUpNext)) {
