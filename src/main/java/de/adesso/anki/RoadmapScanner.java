@@ -134,22 +134,14 @@ public class RoadmapScanner {
 
         if (isMaster(vehicleWhoIsUpNext)) {
           System.out.println("I am master!");
-          vehicle.sendMessage(masterLightPattern);
-          vehicle.sendMessage(new SetSpeedMessage(600, 300));
 
           try {
-              //we shouldnt have to wait here
-              //TODO: listen to other cars and add them to list of cars
-              //Listen for car here
-              //listenToConnection();
-
-
-            isMaster = false;
+            vehicle.sendMessage(new SetSpeedMessage(600, 300));
             System.out.println("passing on master to next car");
             // TODO: tell everyone we are no longer master and assign timestamp master
             //call function right here
+            isMaster = false;
             master.close();
-            vehicle.sendMessage(regularLightsPattern);
 
           } catch (IOException e) {
             e.printStackTrace();
@@ -163,7 +155,7 @@ public class RoadmapScanner {
             //TODO: reassign the vehicleWhoIsUpNext field with whoever goes next so we do not try to reconnect
             //TODO: wait 2 seconds once we receive that we are master signal and at this point listen to other broadcasts
             //TODO: maintain the list of cars to go next
-  
+
 
             slave = new Socket("localhost", PORT);
             PrintWriter out = new PrintWriter (slave.getOutputStream(), true);
