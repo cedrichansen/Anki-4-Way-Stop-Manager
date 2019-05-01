@@ -118,7 +118,6 @@ public class RoadmapScanner {
       switchPositions();
 
       if (atInteresection(lastPos, secondLastPos, thirdLastPos)) {
-        atIntersection = true;
 
         vehicle.sendMessage(new SetSpeedMessage(0, -15000));
         try {
@@ -137,7 +136,13 @@ public class RoadmapScanner {
           System.out.println("I am master!");
 
           try {
-            vehicle.sendMessage(new SetSpeedMessage(600, 300));
+            try {
+              Thread.sleep(100);
+              vehicle.sendMessage(new SetSpeedMessage(600, 300));
+              Thread.sleep(100);
+            } catch (InterruptedException e) {
+              e.printStackTrace();
+            }
             System.out.println("passing on master to next car");
             // TODO: tell everyone we are no longer master and assign timestamp master
             //call function right here
@@ -148,7 +153,7 @@ public class RoadmapScanner {
             e.printStackTrace();
           }
         } else {
-
+          System.out.println("I am the slave :( ");
           try {
             //TODO: Send info and wait for a signal to be master
             //TODO : blink the lights to say that they are salve
@@ -186,7 +191,7 @@ public class RoadmapScanner {
 
 
 
-    if (vehicleName.equals(vehicle.getAdvertisement().getModel().name())) {
+    if (vehicleName.equals(vehicle.getAdvertisement().toString())) {
       try {
         master = new ServerSocket(9000);
         isMaster = true;
