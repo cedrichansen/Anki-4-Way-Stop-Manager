@@ -116,123 +116,127 @@ public class RoadmapScanner {
 
             switchPositions();
 
-            if (atInteresection(lastPos, secondLastPos, thirdLastPos)) {
+            boolean crossedIntersection = false;
 
-                vehicle.sendMessage(new SetSpeedMessage(0, -15000));
-                try {
-                    info.timestamp = Instant.now();
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    System.out.println("Thread interrupted :o");
-                }
+            while (!crossedIntersection) {
 
-                if (vehicleWhoIsUpNext == null) {
-                    vehicleWhoIsUpNext = vehicle.getAdvertisement().toString();
-                    System.out.println(vehicleWhoIsUpNext);
-                }
+                if (atInteresection(lastPos, secondLastPos, thirdLastPos)) {
 
-                if (isMaster(vehicleWhoIsUpNext)) {
-                    System.out.println("I am master!");
-
-                    boolean listening = true;
-
-
-                    while (listening) {
-                        Socket slave;
-                        try {
-                            master.setSoTimeout(2500);
-                            System.out.println("Waiting for any responses");
-                            slave = master.accept();
-                            System.out.println("Found a connectionToMaster!");
-
-                            BufferedReader in = new BufferedReader(new InputStreamReader(slave.getInputStream()));
-                            String fromSlave = in.readLine();
-                            System.out.println(fromSlave);
-
-
-
-                            String[] info = fromSlave.split("=-=-=-=-=");
-                            VehicleInfo.IntersectionMessage otherCarAtStop = new VehicleInfo.IntersectionMessage(info[0], info[1].substring(0, info[1].indexOf("EndOfCar")));
-                            otherVehicles.add(otherCarAtStop);
-                            Collections.sort(otherVehicles);
-
-                            PrintWriter out = new PrintWriter(slave.getOutputStream(), true);
-
-                            System.out.println("Next master will be: " + otherVehicles.get(0).toString());
-                            //tell the cars who is going next
-                            out.println(otherVehicles.get(0).toString());
-                            out.close ();
-                            in.close();
-                        } catch (IOException e) {
-                            listening = false;
-                        }
+                    vehicle.sendMessage(new SetSpeedMessage(0, 15000));
+                    try {
+                        info.timestamp = Instant.now();
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        System.out.println("Thread interrupted :o");
                     }
 
-                    //reset the arraylist
-                    otherVehicles = new ArrayList<>();
+                    if (vehicleWhoIsUpNext == null) {
+                        vehicleWhoIsUpNext = vehicle.getAdvertisement().toString();
+                        System.out.println(vehicleWhoIsUpNext);
+                    }
+
+                    if (isMaster(vehicleWhoIsUpNext)) {
+                        System.out.println("I am master!");
+
+                        boolean listening = true;
 
 
+                        while (listening) {
+                            Socket slave;
+                            try {
+                                master.setSoTimeout(2500);
+                                System.out.println("Waiting for any responses");
+                                slave = master.accept();
+                                System.out.println("Found a connectionToMaster!");
 
-                    try {
+                                BufferedReader in = new BufferedReader(new InputStreamReader(slave.getInputStream()));
+                                String fromSlave = in.readLine();
+                                System.out.println(fromSlave);
+
+
+                                String[] info = fromSlave.split("=-=-=-=-=");
+                                VehicleInfo.IntersectionMessage otherCarAtStop = new VehicleInfo.IntersectionMessage(info[0], info[1].substring(0, info[1].indexOf("EndOfCar")));
+                                otherVehicles.add(otherCarAtStop);
+                                Collections.sort(otherVehicles);
+
+                                PrintWriter out = new PrintWriter(slave.getOutputStream(), true);
+
+                                System.out.println("Next master will be: " + otherVehicles.get(0).toString());
+                                //tell the cars who is going next
+                                out.println(otherVehicles.get(0).toString());
+                                out.close();
+                                in.close();
+                            } catch (IOException e) {
+                                listening = false;
+                            }
+                        }
+
+                        //reset the arraylist
+                        otherVehicles = new ArrayList<>();
+
+
                         try {
-                            Thread.sleep(100);
-                            vehicle.sendMessage(new SetSpeedMessage(600, 300));
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
+                            try {
+                                Thread.sleep(100);
+                                vehicle.sendMessage(new SetSpeedMessage(600, 300));
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            System.out.println("passing on master to next car");
+                            // TODO: tell everyone we are no longer master and assign timestamp master
+                            //call function right here
+                            isMaster = false;
+                            master.close();
+                            crossedIntersection = true;
+
+                        } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        System.out.println("passing on master to next car");
-                        // TODO: tell everyone we are no longer master and assign timestamp master
-                        //call function right here
-                        isMaster = false;
-                        master.close();
+                    } else {
+                        System.out.println("I am the connectionToMaster :( ");
+                        try {
+                            //TODO: Send info and wait for a signal to be master
+                            //TODO : blink the lights to say that they are salve
+                            //TODO: when we receive message to be master, break out of this and then we will now be master
+                            //TODO: reassign the vehicleWhoIsUpNext field with whoever goes next so we do not try to reconnect
+                            //TODO: wait 2 seconds once we receive that we are master signal and at this point listen to other broadcasts
+                            //TODO: maintain the list of cars to go next
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
+
+                            connectionToMaster = new Socket("localhost", PORT);
+                            System.out.println("Connected to master");
+                            PrintWriter out = new PrintWriter(connectionToMaster.getOutputStream(), true);
+
+                            VehicleInfo.IntersectionMessage myInfo = new VehicleInfo.IntersectionMessage(vehicle.getAdvertisement().toString(), info.timestamp.toString());
+                            System.out.println(myInfo);
+                            out.println(myInfo);
+
+                            BufferedReader in = new BufferedReader(new InputStreamReader(connectionToMaster.getInputStream()));
+                            String fromMaster = in.readLine();
+                            System.out.println("Car order (as decided by master): " + fromMaster);
+
+                            String[] nextMasterStr = fromMaster.split("=-=-=-=-=");
+
+                            String carModel = nextMasterStr[0];
+                            String carTimeStamp = removeSuffix(nextMasterStr[1], "EndOfCar");
+
+                            System.out.println("next car model: " + carModel);
+                            System.out.println("next car Timestamp" + carTimeStamp);
+                            //on the next line, we dont care about the timestamp, we only care that the
+                            VehicleInfo.IntersectionMessage nextMaster = new VehicleInfo.IntersectionMessage(carModel, carTimeStamp);
+                            vehicleWhoIsUpNext = nextMaster.model;
+                            System.out.println("Next vehicle to connect is " + vehicleWhoIsUpNext);
+
+                        } catch (IOException e) {
+                            //port already taken..., try another port, ORRRR master changed
+                            //This method will be retriggered
+                            System.out.println("Master was passed, reconnecting");
+                            System.out.println("Vehcile who is next is " + vehicleWhoIsUpNext);
+                            System.out.println("Will I be going next? " + vehicleWhoIsUpNext.equals(vehicle.getAdvertisement().toString()));
+                        }
+
                     }
-                } else {
-                    System.out.println("I am the connectionToMaster :( ");
-                    try {
-                        //TODO: Send info and wait for a signal to be master
-                        //TODO : blink the lights to say that they are salve
-                        //TODO: when we receive message to be master, break out of this and then we will now be master
-                        //TODO: reassign the vehicleWhoIsUpNext field with whoever goes next so we do not try to reconnect
-                        //TODO: wait 2 seconds once we receive that we are master signal and at this point listen to other broadcasts
-                        //TODO: maintain the list of cars to go next
-
-
-                        connectionToMaster = new Socket("localhost", PORT);
-                        System.out.println("Connected to master");
-                        PrintWriter out = new PrintWriter(connectionToMaster.getOutputStream(), true);
-
-                        VehicleInfo.IntersectionMessage myInfo = new VehicleInfo.IntersectionMessage(vehicle.getAdvertisement().toString(),info.timestamp.toString());
-                        System.out.println(myInfo);
-                        out.println(myInfo);
-
-                        BufferedReader in = new BufferedReader(new InputStreamReader(connectionToMaster.getInputStream()));
-                        String fromMaster = in.readLine();
-                        System.out.println("Car order (as decided by master): " + fromMaster);
-
-                        String [] nextMasterStr = fromMaster.split("=-=-=-=-=");
-
-                        String carModel = nextMasterStr[0];
-                        String carTimeStamp = removeSuffix(nextMasterStr[1], "EndOfCar");
-
-                        System.out.println("next car model: " + carModel);
-                        System.out.println("next car Timestamp" + carTimeStamp);
-                        //on the next line, we dont care about the timestamp, we only care that the
-                        VehicleInfo.IntersectionMessage nextMaster = new VehicleInfo.IntersectionMessage(carModel,  carTimeStamp);
-                        vehicleWhoIsUpNext = nextMaster.model;
-                        System.out.println("Next vehicle to connect is " + vehicleWhoIsUpNext);
-
-                    } catch (IOException e) {
-                        //port already taken..., try another port, ORRRR master changed
-                        //This method will be retriggered
-                        System.out.println("Master was passed, reconnecting");
-                        System.out.println("Vehcile who is next is " + vehicleWhoIsUpNext);
-                        System.out.println("Will I be going next? " + vehicleWhoIsUpNext.equals(vehicle.getAdvertisement().toString()));
-                    }
-
                 }
 
             }
@@ -297,9 +301,8 @@ public class RoadmapScanner {
         lastPos = last;
     }
 
-    public static String removeSuffix(final String s, final String suffix)
-    {
-        if (s != null && suffix != null && s.endsWith(suffix)){
+    public static String removeSuffix(final String s, final String suffix) {
+        if (s != null && suffix != null && s.endsWith(suffix)) {
             return s.substring(0, s.length() - suffix.length());
         }
         return s;
