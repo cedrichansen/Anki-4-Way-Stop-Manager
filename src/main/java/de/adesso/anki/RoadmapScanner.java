@@ -196,20 +196,19 @@ public class RoadmapScanner {
                             e.printStackTrace();
                         }
                     } else {
-                        System.out.println("I am the connectionToMaster :( ");
                         try {
                             //TODO: Send info and wait for a signal to be master
                             //TODO : blink the lights to say that they are salve
                             //TODO: when we receive message to be master, break out of this and then we will now be master
                             //TODO: reassign the vehicleWhoIsUpNext field with whoever goes next so we do not try to reconnect
                             //TODO: wait 2 seconds once we receive that we are master signal and at this point listen to other broadcasts
-
-                            connectionToMaster = new Socket("localhost", PORT);
-                            System.out.println("Connected to master");
-                            PrintWriter out = new PrintWriter(connectionToMaster.getOutputStream(), true);
-
-
                             if (newMaster) {
+                                
+                                connectionToMaster = new Socket("localhost", PORT);
+                                System.out.println("Connected to a new master");
+                                PrintWriter out = new PrintWriter(connectionToMaster.getOutputStream(), true);
+
+
                                 VehicleInfo.IntersectionMessage myInfo = new VehicleInfo.IntersectionMessage(vehicle.getAdvertisement().toString(), info.timestamp.toString());
                                 System.out.println(myInfo);
                                 out.println(myInfo);
