@@ -116,7 +116,6 @@ public class RoadmapScanner {
 
             switchPositions();
 
-            boolean crossedIntersection = false;
             vehicle.sendMessage(new SetSpeedMessage(0, 15000));
             try {
                 info.timestamp = Instant.now();
@@ -128,9 +127,7 @@ public class RoadmapScanner {
 
             if (atInteresection(lastPos, secondLastPos, thirdLastPos)) {
 
-                while (!crossedIntersection) {
-
-
+                while (atIntersection) {
                     if (vehicleWhoIsUpNext == null) {
                         vehicleWhoIsUpNext = vehicle.getAdvertisement().toString();
                         System.out.println(vehicleWhoIsUpNext);
@@ -186,7 +183,8 @@ public class RoadmapScanner {
                             System.out.println("passing on master to next car");
                             isMaster = false;
                             master.close();
-                            crossedIntersection = true;
+                            //break out of loop
+                            atIntersection = false;
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -235,11 +233,10 @@ public class RoadmapScanner {
                     }
                 }
 
-            }
 
-
-            if (roadmap.isComplete()) {
-                this.stopScanning();
+                if (roadmap.isComplete()) {
+                    this.stopScanning();
+                }
             }
         }
     }
