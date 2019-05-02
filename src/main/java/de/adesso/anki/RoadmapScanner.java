@@ -213,10 +213,15 @@ public class RoadmapScanner {
                         String fromMaster = in.readLine();
                         System.out.println("Car order (as decided by master): " + fromMaster);
 
-                        String [] carsInfo = fromMaster.split("EndOfCar");
-                        String [] nextMasterStr = carsInfo[0].split("=-=-=-=-=");
+                        String [] nextMasterStr = fromMaster.split("=-=-=-=-=");
+
+                        String carModel = nextMasterStr[0];
+                        String carTimeStamp = removeSuffix(nextMasterStr[1], "EndOfCar");
+
+                        System.out.println("next car model: " + carModel);
+                        System.out.println("next car Timestamp" + carTimeStamp);
                         //on the next line, we dont care about the timestamp, we only care that the
-                        VehicleInfo.IntersectionMessage nextMaster = new VehicleInfo.IntersectionMessage(nextMasterStr[0], null);
+                        VehicleInfo.IntersectionMessage nextMaster = new VehicleInfo.IntersectionMessage(carModel,  carTimeStamp);
                         vehicleWhoIsUpNext = nextMaster.model;
                         System.out.println("Next vehicle to connect is " + vehicleWhoIsUpNext);
 
@@ -290,6 +295,14 @@ public class RoadmapScanner {
         thirdLastPos = secondLastPos;
         secondLastPos = lastPos;
         lastPos = last;
+    }
+
+    public static String removeSuffix(final String s, final String suffix)
+    {
+        if (s != null && suffix != null && s.endsWith(suffix)){
+            return s.substring(0, s.length() - suffix.length());
+        }
+        return s;
     }
 
 
