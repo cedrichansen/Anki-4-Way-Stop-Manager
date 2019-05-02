@@ -127,11 +127,12 @@ public class RoadmapScanner {
                     System.out.println("Thread interrupted :o");
                 }
 
+                atIntersection = true;
+
                 while (atIntersection) {
 
                     if (vehicleWhoIsUpNext == null) {
                         vehicleWhoIsUpNext = vehicle.getAdvertisement().toString();
-                        System.out.println(vehicleWhoIsUpNext);
                     }
 
                     if (isMaster(vehicleWhoIsUpNext)) {
