@@ -120,12 +120,16 @@ public class RoadmapScanner {
             if (atInteresection(lastPos, secondLastPos, thirdLastPos)) {
 
                 vehicle.sendMessage(new SetSpeedMessage(0, 15000));
+                //we assume the master stays the same, so we dont send them our info all the time
+                boolean sameMaster = true;
+
                 try {
                     info.timestamp = Instant.now();
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     System.out.println("Thread interrupted :o");
                 }
+
 
                 atIntersection = true;
 
@@ -204,9 +208,12 @@ public class RoadmapScanner {
                             System.out.println("Connected to master");
                             PrintWriter out = new PrintWriter(connectionToMaster.getOutputStream(), true);
 
-                            VehicleInfo.IntersectionMessage myInfo = new VehicleInfo.IntersectionMessage(vehicle.getAdvertisement().toString(), info.timestamp.toString());
-                            System.out.println(myInfo);
-                            out.println(myInfo);
+
+                            if (!sameMaster) {
+                                VehicleInfo.IntersectionMessage myInfo = new VehicleInfo.IntersectionMessage(vehicle.getAdvertisement().toString(), info.timestamp.toString());
+                                System.out.println(myInfo);
+                                out.println(myInfo);
+                            }
 
                             BufferedReader in = new BufferedReader(new InputStreamReader(connectionToMaster.getInputStream()));
                             String fromMaster = in.readLine();
@@ -230,6 +237,8 @@ public class RoadmapScanner {
                             System.out.println("Master was passed, reconnecting");
                             System.out.println("Vehcile who is next is " + vehicleWhoIsUpNext);
                             System.out.println("Will I be going next? " + vehicleWhoIsUpNext.equals(vehicle.getAdvertisement().toString()));
+                            //the master changed so we prepare to resent our info if needed
+                            sameMaster = false;
                         }
 
                     }
