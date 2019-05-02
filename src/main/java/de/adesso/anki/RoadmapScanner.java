@@ -203,7 +203,7 @@ public class RoadmapScanner {
                             //TODO: reassign the vehicleWhoIsUpNext field with whoever goes next so we do not try to reconnect
                             //TODO: wait 2 seconds once we receive that we are master signal and at this point listen to other broadcasts
                             if (newMaster) {
-                                
+
                                 connectionToMaster = new Socket("localhost", PORT);
                                 System.out.println("Connected to a new master");
                                 PrintWriter out = new PrintWriter(connectionToMaster.getOutputStream(), true);
@@ -240,7 +240,11 @@ public class RoadmapScanner {
                             //the master changed so we prepare to resent our info if needed
                             newMaster = true;
                         }
-
+                        try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
