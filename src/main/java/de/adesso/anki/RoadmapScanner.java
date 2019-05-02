@@ -205,7 +205,6 @@ public class RoadmapScanner {
                             //TODO: reassign the vehicleWhoIsUpNext field with whoever goes next so we do not try to reconnect
                             //TODO: wait 2 seconds once we receive that we are master signal and at this point listen to other broadcasts
                             if (newMaster) {
-
                                 connectionToMaster = new Socket("localhost", PORT);
                                 System.out.println("Connected to a new master");
                                 PrintWriter out = new PrintWriter(connectionToMaster.getOutputStream(), true);
@@ -231,6 +230,7 @@ public class RoadmapScanner {
                                 vehicleWhoIsUpNext = nextMaster.model;
                                 System.out.println("Next vehicle to connect is " + vehicleWhoIsUpNext);
                                 newMaster = false;
+                                connectionToMaster.close();
                             }
 
                         } catch (IOException e) {
@@ -240,6 +240,7 @@ public class RoadmapScanner {
                             System.out.println("Vehcile who is next is " + vehicleWhoIsUpNext);
                             System.out.println("Will I be going next? " + vehicleWhoIsUpNext.equals(vehicle.getAdvertisement().toString()));
                             //the master changed so we prepare to resent our info if needed
+
                             newMaster = true;
                         }
                         try {
