@@ -38,7 +38,7 @@ public class VehicleInfo implements Serializable{
 		public int compareTo(Object o) {
 			IntersectionMessage otherMsg = (IntersectionMessage)o;
 
-			return this.timestamp.compareTo(otherMsg.timestamp);
+			return otherMsg.timestamp.compareTo(this.timestamp);
 
 		}
 

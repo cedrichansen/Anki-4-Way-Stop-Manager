@@ -139,6 +139,7 @@ public class RoadmapScanner {
                         vehicleWhoIsUpNext = vehicle.getAdvertisement().toString();
                     }
 
+
                     if (isMaster(vehicleWhoIsUpNext)) {
                         System.out.println("I am master!");
 
@@ -150,7 +151,7 @@ public class RoadmapScanner {
                                 master.setSoTimeout(2500);
                                 System.out.println("Waiting for any responses");
                                 slave = master.accept();
-                                System.out.println("Found a connectionToMaster!");
+                                System.out.println("Found a connection!");
 
                                 BufferedReader in = new BufferedReader(new InputStreamReader(slave.getInputStream()));
                                 String fromSlave = in.readLine();
@@ -205,6 +206,8 @@ public class RoadmapScanner {
                             //TODO: reassign the vehicleWhoIsUpNext field with whoever goes next so we do not try to reconnect
                             //TODO: wait 2 seconds once we receive that we are master signal and at this point listen to other broadcasts
                             if (newMaster) {
+
+                                //tell master who we are
                                 connectionToMaster = new Socket("localhost", PORT);
                                 System.out.println("Connected to a new master");
                                 PrintWriter out = new PrintWriter(connectionToMaster.getOutputStream(), true);
@@ -244,6 +247,7 @@ public class RoadmapScanner {
                             newMaster = true;
                         }
                         try {
+                            System.out.println("Trying again in a few seconds...");
                             Thread.sleep(500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
