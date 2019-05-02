@@ -186,11 +186,13 @@ public class RoadmapScanner {
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                            System.out.println("passing on master to next car");
                             isMaster = false;
                             master.close();
                             //break out of loop
                             atIntersection = false;
+
+                            System.out.println("No longer master... Port is open");
+
 
                         } catch (IOException e) {
                             e.printStackTrace();
