@@ -224,6 +224,8 @@ public class RoadmapScanner {
                         //port already taken..., try another port, ORRRR master changed
                         //This method will be retriggered
                         System.out.println("Master was passed, reconnecting");
+                        System.out.println("Vehcile who is next is " + vehicleWhoIsUpNext);
+                        System.out.println("Will I be going next? " + vehicleWhoIsUpNext.equals(vehicle.getAdvertisement().toString()));
                     }
 
                 }
