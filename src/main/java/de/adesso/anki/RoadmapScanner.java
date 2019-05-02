@@ -117,18 +117,19 @@ public class RoadmapScanner {
             switchPositions();
 
             boolean crossedIntersection = false;
+            vehicle.sendMessage(new SetSpeedMessage(0, 15000));
+            try {
+                info.timestamp = Instant.now();
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                System.out.println("Thread interrupted :o");
+            }
 
-            while (!crossedIntersection) {
 
-                if (atInteresection(lastPos, secondLastPos, thirdLastPos)) {
+            if (atInteresection(lastPos, secondLastPos, thirdLastPos)) {
 
-                    vehicle.sendMessage(new SetSpeedMessage(0, 15000));
-                    try {
-                        info.timestamp = Instant.now();
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        System.out.println("Thread interrupted :o");
-                    }
+                while (!crossedIntersection) {
+
 
                     if (vehicleWhoIsUpNext == null) {
                         vehicleWhoIsUpNext = vehicle.getAdvertisement().toString();
@@ -139,7 +140,6 @@ public class RoadmapScanner {
                         System.out.println("I am master!");
 
                         boolean listening = true;
-
 
                         while (listening) {
                             Socket slave;
@@ -184,8 +184,6 @@ public class RoadmapScanner {
                                 e.printStackTrace();
                             }
                             System.out.println("passing on master to next car");
-                            // TODO: tell everyone we are no longer master and assign timestamp master
-                            //call function right here
                             isMaster = false;
                             master.close();
                             crossedIntersection = true;
@@ -201,8 +199,6 @@ public class RoadmapScanner {
                             //TODO: when we receive message to be master, break out of this and then we will now be master
                             //TODO: reassign the vehicleWhoIsUpNext field with whoever goes next so we do not try to reconnect
                             //TODO: wait 2 seconds once we receive that we are master signal and at this point listen to other broadcasts
-                            //TODO: maintain the list of cars to go next
-
 
                             connectionToMaster = new Socket("localhost", PORT);
                             System.out.println("Connected to master");
