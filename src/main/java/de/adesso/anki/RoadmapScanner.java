@@ -116,16 +116,16 @@ public class RoadmapScanner {
 
             switchPositions();
 
-            vehicle.sendMessage(new SetSpeedMessage(0, 15000));
-            try {
-                info.timestamp = Instant.now();
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                System.out.println("Thread interrupted :o");
-            }
-
 
             if (atInteresection(lastPos, secondLastPos, thirdLastPos)) {
+
+                vehicle.sendMessage(new SetSpeedMessage(0, 15000));
+                try {
+                    info.timestamp = Instant.now();
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    System.out.println("Thread interrupted :o");
+                }
 
                 while (atIntersection) {
 
