@@ -209,7 +209,7 @@ public class RoadmapScanner {
                             PrintWriter out = new PrintWriter(connectionToMaster.getOutputStream(), true);
 
 
-                            if (!sameMaster) {
+                            if (sameMaster) {
                                 VehicleInfo.IntersectionMessage myInfo = new VehicleInfo.IntersectionMessage(vehicle.getAdvertisement().toString(), info.timestamp.toString());
                                 System.out.println(myInfo);
                                 out.println(myInfo);
