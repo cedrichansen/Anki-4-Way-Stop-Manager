@@ -215,7 +215,8 @@ public class RoadmapScanner {
 
                         String [] carsInfo = fromMaster.split("EndOfCar");
                         String [] nextMasterStr = carsInfo[0].split("=-=-=-=-=");
-                        VehicleInfo.IntersectionMessage nextMaster = new VehicleInfo.IntersectionMessage(nextMasterStr[0], nextMasterStr[1].substring(0, nextMasterStr[1].indexOf("EndOfCar")));
+                        //on the next line, we dont care about the timestamp, we only care that the
+                        VehicleInfo.IntersectionMessage nextMaster = new VehicleInfo.IntersectionMessage(nextMasterStr[0], null);
                         vehicleWhoIsUpNext = nextMaster.model;
                         System.out.println("Next vehicle to connect is " + vehicleWhoIsUpNext);
 
