@@ -128,6 +128,7 @@ public class RoadmapScanner {
             if (atInteresection(lastPos, secondLastPos, thirdLastPos)) {
 
                 while (atIntersection) {
+
                     if (vehicleWhoIsUpNext == null) {
                         vehicleWhoIsUpNext = vehicle.getAdvertisement().toString();
                         System.out.println(vehicleWhoIsUpNext);
@@ -232,13 +233,14 @@ public class RoadmapScanner {
 
                     }
                 }
+            }
 
 
-                if (roadmap.isComplete()) {
-                    this.stopScanning();
-                }
+            if (roadmap.isComplete()) {
+                this.stopScanning();
             }
         }
+
     }
 
 
