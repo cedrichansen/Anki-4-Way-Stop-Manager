@@ -213,23 +213,25 @@ public class RoadmapScanner {
                                 VehicleInfo.IntersectionMessage myInfo = new VehicleInfo.IntersectionMessage(vehicle.getAdvertisement().toString(), info.timestamp.toString());
                                 System.out.println(myInfo);
                                 out.println(myInfo);
+                                sameMaster = false;
+
+
+                                BufferedReader in = new BufferedReader(new InputStreamReader(connectionToMaster.getInputStream()));
+                                String fromMaster = in.readLine();
+                                System.out.println("Car order (as decided by master): " + fromMaster);
+
+                                String[] nextMasterStr = fromMaster.split("=-=-=-=-=");
+
+                                String carModel = nextMasterStr[0];
+                                String carTimeStamp = removeSuffix(nextMasterStr[1], "EndOfCar");
+
+                                System.out.println("next car model: " + carModel);
+                                System.out.println("next car Timestamp" + carTimeStamp);
+                                //on the next line, we dont care about the timestamp, we only care that the
+                                VehicleInfo.IntersectionMessage nextMaster = new VehicleInfo.IntersectionMessage(carModel, carTimeStamp);
+                                vehicleWhoIsUpNext = nextMaster.model;
+                                System.out.println("Next vehicle to connect is " + vehicleWhoIsUpNext);
                             }
-
-                            BufferedReader in = new BufferedReader(new InputStreamReader(connectionToMaster.getInputStream()));
-                            String fromMaster = in.readLine();
-                            System.out.println("Car order (as decided by master): " + fromMaster);
-
-                            String[] nextMasterStr = fromMaster.split("=-=-=-=-=");
-
-                            String carModel = nextMasterStr[0];
-                            String carTimeStamp = removeSuffix(nextMasterStr[1], "EndOfCar");
-
-                            System.out.println("next car model: " + carModel);
-                            System.out.println("next car Timestamp" + carTimeStamp);
-                            //on the next line, we dont care about the timestamp, we only care that the
-                            VehicleInfo.IntersectionMessage nextMaster = new VehicleInfo.IntersectionMessage(carModel, carTimeStamp);
-                            vehicleWhoIsUpNext = nextMaster.model;
-                            System.out.println("Next vehicle to connect is " + vehicleWhoIsUpNext);
 
                         } catch (IOException e) {
                             //port already taken..., try another port, ORRRR master changed
