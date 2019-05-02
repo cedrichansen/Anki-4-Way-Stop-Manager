@@ -158,10 +158,9 @@ public class RoadmapScanner {
 
                             PrintWriter out = new PrintWriter(slave.getOutputStream(), true);
 
-                            String outputToSlave = getNextVehicleString();
-                            System.out.println("Output to slave: " + outputToSlave);
+                            System.out.println("Next master will be: " + otherVehicles.get(0).toString());
                             //tell the cars who is going next
-                            out.println(outputToSlave);
+                            out.println(otherVehicles.get(0).toString());
                             out.close ();
                             in.close();
                         } catch (IOException e) {
@@ -290,17 +289,5 @@ public class RoadmapScanner {
         lastPos = last;
     }
 
-
-    public String getNextVehicleString(){
-
-        System.out.println("Sorting the cars by timestamp...");
-        String ret = "";
-        for (VehicleInfo.IntersectionMessage v : otherVehicles) {
-            ret.concat(v.toString());
-        }
-
-        return ret;
-
-    }
 
 }
