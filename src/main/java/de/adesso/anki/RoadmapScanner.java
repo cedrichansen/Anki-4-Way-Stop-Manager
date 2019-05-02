@@ -199,9 +199,12 @@ public class RoadmapScanner {
 
 
                         slave = new Socket("localhost", PORT);
+                        System.out.println("Connected to master" +
+                                "");
                         PrintWriter out = new PrintWriter(slave.getOutputStream(), true);
 
                         VehicleInfo.IntersectionMessage myInfo = new VehicleInfo.IntersectionMessage(vehicle.getAdvertisement().toString(),info.timestamp.toString());
+                        System.out.println(myInfo);
                         out.println(myInfo);
 
                         BufferedReader in = new BufferedReader(new InputStreamReader(slave.getInputStream()));
@@ -209,11 +212,11 @@ public class RoadmapScanner {
                         System.out.println(fromMaster);
 
                         String [] carsInfo = fromMaster.split("EndOfCar");
-                        String [] nextMasterStr = fromMaster.split("=-=-=-=-=");
+                        String [] nextMasterStr = carsInfo[0].split("=-=-=-=-=");
                         VehicleInfo.IntersectionMessage nextMaster = new VehicleInfo.IntersectionMessage(nextMasterStr[0], nextMasterStr[1].substring(0, nextMasterStr[1].indexOf("EndOfCar")));
                         vehicleWhoIsUpNext = nextMaster.model;
                         System.out.println("Next vehicle to connect is " + vehicleWhoIsUpNext);
-                        
+
                     } catch (IOException e) {
                         //port already taken..., try another port, ORRRR master changed
                         //This method will be retriggered
