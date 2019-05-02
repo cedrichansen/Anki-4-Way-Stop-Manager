@@ -5,9 +5,7 @@ import de.adesso.anki.messages.LocalizationPositionUpdateMessage;
 import de.adesso.anki.messages.LocalizationTransitionUpdateMessage;
 import de.adesso.anki.messages.SetSpeedMessage;
 import de.adesso.anki.roadmap.Roadmap;
-import edu.oswego.cs.CPSLab.anki.AnkiConnectionTest;
 import edu.oswego.cs.CPSLab.anki.FourWayStop.VehicleInfo;
-import sun.awt.windows.ThemeReader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +13,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,7 +30,7 @@ public class RoadmapScanner {
     private ArrayList<VehicleInfo.IntersectionMessage> otherVehicles = new ArrayList<>();
     private ServerSocket master;
     private final int PORT = 9000;
-    private Socket slave;
+    private Socket connectionToMaster;
     VehicleInfo info = new VehicleInfo();
     private static boolean atIntersection;
     private static boolean isMaster;
@@ -146,6 +143,7 @@ public class RoadmapScanner {
                             master.setSoTimeout(2500);
                             System.out.println("Waiting for any responses");
                             slave = master.accept();
+                            System.out.println("Found a connectionToMaster!");
 
                             BufferedReader in = new BufferedReader(new InputStreamReader(slave.getInputStream()));
                             String fromSlave = in.readLine();
@@ -188,7 +186,7 @@ public class RoadmapScanner {
                         e.printStackTrace();
                     }
                 } else {
-                    System.out.println("I am the slave :( ");
+                    System.out.println("I am the connectionToMaster :( ");
                     try {
                         //TODO: Send info and wait for a signal to be master
                         //TODO : blink the lights to say that they are salve
@@ -198,18 +196,17 @@ public class RoadmapScanner {
                         //TODO: maintain the list of cars to go next
 
 
-                        slave = new Socket("localhost", PORT);
-                        System.out.println("Connected to master" +
-                                "");
-                        PrintWriter out = new PrintWriter(slave.getOutputStream(), true);
+                        connectionToMaster = new Socket("localhost", PORT);
+                        System.out.println("Connected to master");
+                        PrintWriter out = new PrintWriter(connectionToMaster.getOutputStream(), true);
 
                         VehicleInfo.IntersectionMessage myInfo = new VehicleInfo.IntersectionMessage(vehicle.getAdvertisement().toString(),info.timestamp.toString());
                         System.out.println(myInfo);
                         out.println(myInfo);
 
-                        BufferedReader in = new BufferedReader(new InputStreamReader(slave.getInputStream()));
+                        BufferedReader in = new BufferedReader(new InputStreamReader(connectionToMaster.getInputStream()));
                         String fromMaster = in.readLine();
-                        System.out.println(fromMaster);
+                        System.out.println("Car order (as decided by master): " + fromMaster);
 
                         String [] carsInfo = fromMaster.split("EndOfCar");
                         String [] nextMasterStr = carsInfo[0].split("=-=-=-=-=");
