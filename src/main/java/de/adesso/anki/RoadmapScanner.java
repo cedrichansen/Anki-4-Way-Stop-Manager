@@ -121,7 +121,7 @@ public class RoadmapScanner {
 
                 vehicle.sendMessage(new SetSpeedMessage(0, 15000));
                 //we assume the master stays the same, so we dont send them our info all the time
-                boolean sameMaster = true;
+                boolean newMaster = true;
 
                 try {
                     info.timestamp = Instant.now();
@@ -209,12 +209,10 @@ public class RoadmapScanner {
                             PrintWriter out = new PrintWriter(connectionToMaster.getOutputStream(), true);
 
 
-                            if (sameMaster) {
+                            if (newMaster) {
                                 VehicleInfo.IntersectionMessage myInfo = new VehicleInfo.IntersectionMessage(vehicle.getAdvertisement().toString(), info.timestamp.toString());
                                 System.out.println(myInfo);
                                 out.println(myInfo);
-                                sameMaster = false;
-
 
                                 BufferedReader in = new BufferedReader(new InputStreamReader(connectionToMaster.getInputStream()));
                                 String fromMaster = in.readLine();
@@ -231,6 +229,7 @@ public class RoadmapScanner {
                                 VehicleInfo.IntersectionMessage nextMaster = new VehicleInfo.IntersectionMessage(carModel, carTimeStamp);
                                 vehicleWhoIsUpNext = nextMaster.model;
                                 System.out.println("Next vehicle to connect is " + vehicleWhoIsUpNext);
+                                newMaster = false;
                             }
 
                         } catch (IOException e) {
@@ -240,7 +239,7 @@ public class RoadmapScanner {
                             System.out.println("Vehcile who is next is " + vehicleWhoIsUpNext);
                             System.out.println("Will I be going next? " + vehicleWhoIsUpNext.equals(vehicle.getAdvertisement().toString()));
                             //the master changed so we prepare to resent our info if needed
-                            sameMaster = false;
+                            newMaster = true;
                         }
 
                     }
